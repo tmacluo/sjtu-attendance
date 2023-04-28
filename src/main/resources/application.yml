@@ -23,6 +23,17 @@ spring:
     view:
       suffix: .html
       prefix: /
+  redis:
+    database: 0
+    host: kzwkmxof.redis.bozq5jnk.q5kb4ss9.com
+    port: 6379
+    lettuce:
+      pool:
+        min-idle: 0
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+    connect-timeout: 30000ms
 
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml

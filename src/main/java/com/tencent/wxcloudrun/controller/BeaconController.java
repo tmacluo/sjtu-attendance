@@ -4,7 +4,9 @@ import com.tencent.wxcloudrun.config.ApiPaginationResponse;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.Beacon;
 import com.tencent.wxcloudrun.service.BeaconService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,17 +18,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 public class BeaconController {
     @Autowired
     private BeaconService beaconService;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
     @GetMapping(value = "/api/beacon")
     ApiResponse getBeacon() {
+        log.info(redisTemplate.opsForValue().get("key"));
         return ApiResponse.ok(beaconService.getBeacons());
     }
 
     @GetMapping(value = "/api/beacons")
     ApiPaginationResponse getBeacons(@RequestParam Map<String, String> allParams) {
+
+        redisTemplate.opsForValue().set("key", "test");
+
         List<Beacon> beacons = beaconService.getBeacons();
         beacons = filter(allParams, beacons);
         return ApiPaginationResponse.ok(beacons, beacons.size(), 5, 1);
