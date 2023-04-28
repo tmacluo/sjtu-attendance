@@ -2,12 +2,23 @@ server:
   port: 80
 
 
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:springboot_demo}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MySQL_PASSWORD}
+#  mvc:
+#    view:
+#      suffix: .html
+#      prefix: /
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:springboot_demo}
-    username: ${MYSQL_USERNAME}
-    password: ${MySQL_PASSWORD}
+    url: jdbc:mysql://sh-cynosdbmysql-grp-bnuzh4sa.sql.tencentcdb.com:25695/${MYSQL_DATABASE:sjtu_checkin}
+    username: root
+    password: bRNhbeg7
   mvc:
     view:
       suffix: .html
