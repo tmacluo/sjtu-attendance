@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjtu.checkin.dao.CheckinMapper">
+
+    <resultMap id="checkinMapper" type="com.sjtu.checkin.model.Checkin">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="classroom" column="classroom"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="n" column="n"/>
+    </resultMap>
+
+    <select id="getCheckins" resultMap="checkinMapper">
+        SELECT *
+        FROM beacon
+    </select>
+
+    <insert id="saveCheckins" parameterType="com.sjtu.checkin.model.Checkin">
+        insert into checkin (`student_no`, `student_name`, `classroom`, `beacons`, `created_time`, `last_updated_time`)
+        values (#{studentNo}, #{studentName}, #{classroom}, #{beaconsJson}, #{createdTime}, #{lastUpdatedTime})
+    </insert>
+
+</mapper>

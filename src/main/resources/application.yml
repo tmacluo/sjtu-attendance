@@ -16,7 +16,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://sh-cynosdbmysql-grp-bnuzh4sa.sql.tencentcdb.com:25695/${MYSQL_DATABASE:sjtu_checkin}
+    url: jdbc:mysql://10.26.100.66:3306/${MYSQL_DATABASE:sjtu_checkin}
+    #url: jdbc:mysql://sh-cynosdbmysql-grp-bnuzh4sa.sql.tencentcdb.com:25695/${MYSQL_DATABASE:sjtu_checkin}
     username: root
     password: bRNhbeg7
   mvc:
@@ -26,6 +27,7 @@ spring:
   redis:
     database: 0
     host: kzwkmxof.redis.bozq5jnk.q5kb4ss9.com
+    #host: localhost
     port: 6379
     lettuce:
       pool:
@@ -33,7 +35,8 @@ spring:
         max-active: 8
         max-idle: 8
         max-wait: -1ms
-    connect-timeout: 30000ms
+    connect-timeout: 10000ms
 
-mybatis:
-  mapper-locations: classpath*:mapper/*Mapper.xml
+# use annotation instead of xml configuration
+#mybatis:
+#  mapper-locations: classpath*:mapper/*Mapper.xml
