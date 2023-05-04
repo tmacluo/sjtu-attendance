@@ -16,10 +16,13 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.26.100.66:3306/${MYSQL_DATABASE:sjtu_checkin}
+    #    url: jdbc:mysql://10.26.100.66:3306/${MYSQL_DATABASE:sjtu_checkin}
     #url: jdbc:mysql://sh-cynosdbmysql-grp-bnuzh4sa.sql.tencentcdb.com:25695/${MYSQL_DATABASE:sjtu_checkin}
-    username: root
-    password: bRNhbeg7
+    #    username: root
+    #    password: bRNhbeg7
+    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:springboot_demo}
+    username: ${MYSQL_USERNAME}
+    password: ${MySQL_PASSWORD}
   mvc:
     view:
       suffix: .html
