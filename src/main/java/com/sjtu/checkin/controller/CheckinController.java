@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 public class CheckinController {
+    private final CheckinService checkinService;
 
-    @Autowired
-    private CheckinService checkinService;
+    public CheckinController(@Autowired CheckinService checkinService) {
+        this.checkinService = checkinService;
+    }
 
     @PostMapping(value = "/api/checkin")
     ApiResponse checkin(@RequestBody Checkin checkin) {

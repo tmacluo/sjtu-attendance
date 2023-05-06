@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 public class BeaconController {
-    @Autowired
-    private BeaconService beaconService;
+    private final BeaconService beaconService;
+
+    public BeaconController(@Autowired BeaconService beaconService){
+        this.beaconService = beaconService;
+    }
 
     @GetMapping(value = "/api/beacon")
     ApiResponse getBeacon() {
@@ -37,6 +40,7 @@ public class BeaconController {
         return ApiPaginationResponse.ok(beacons, beacons.size(), 5, 1);
     }
 
+    // TODO filter by SQL
     private List<Beacon> filter(Map<String, String> params, List<Beacon> beacons) {
         if (!CollectionUtils.isEmpty(params)) {
             String name = params.get("name");

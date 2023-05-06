@@ -19,7 +19,7 @@ public class Checkin {
     private String beaconsJson;
     @Data
     public static class Beacon {
-        private String name;
+        private String beaconName;
         private String rssi;
     }
 }

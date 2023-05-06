@@ -80,9 +80,10 @@ public class CheckinServiceImpl implements CheckinService {
         }
         Optional<Checkin.Beacon> strongestBeacon = getBeaconWithStrongestSignal(checkinBeacons);
         if (strongestBeacon.isPresent()) {
-            log.info("found the strongest rssi signal {}", strongestBeacon.get());
+            log.info("found the beacon with strongest rssi signal {}", strongestBeacon.get());
             Optional<Beacon> matchedBeacon = availableBeacons.stream()
-                    .filter(beacon -> beacon.getName().equals(strongestBeacon.get().getName()))
+                    // the name passed from frontend is UUID of that beacon
+                    .filter(beacon -> beacon.getId().equalsIgnoreCase(strongestBeacon.get().getBeaconName()))
                     .findFirst();
             if (matchedBeacon.isPresent()) {
                 log.info("found matched classroom {}", matchedBeacon.get().getClassroom());
