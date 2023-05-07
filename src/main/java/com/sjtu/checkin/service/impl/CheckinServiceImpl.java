@@ -45,6 +45,8 @@ public class CheckinServiceImpl implements CheckinService {
 
     @Override
     public Checkin save(Checkin checkin) {
+        //^\d{12}$
+
         List<Beacon> availableBeacons = beaconService.getBeacons();
         checkin.setClassroom(determineClassroom(availableBeacons, checkin.getBeacons()));
         checkin.setCreatedTime(ZonedDateTime.now(ZoneOffset.UTC));
@@ -82,8 +84,8 @@ public class CheckinServiceImpl implements CheckinService {
         if (strongestBeacon.isPresent()) {
             log.info("found the beacon with strongest rssi signal {}", strongestBeacon.get());
             Optional<Beacon> matchedBeacon = availableBeacons.stream()
-                    // the name passed from frontend is UUID of that beacon
-                    .filter(beacon -> beacon.getId().equalsIgnoreCase(strongestBeacon.get().getBeaconName()))
+                    // the name passed from frontend is UUID of that beacon with dash delimiter
+                    .filter(beacon -> beacon.getId().equalsIgnoreCase(strongestBeacon.get().getBeaconName().replaceAll("-","")))
                     .findFirst();
             if (matchedBeacon.isPresent()) {
                 log.info("found matched classroom {}", matchedBeacon.get().getClassroom());
@@ -94,6 +96,10 @@ public class CheckinServiceImpl implements CheckinService {
     }
 
     private static Optional<Checkin.Beacon> getBeaconWithStrongestSignal(List<Checkin.Beacon> checkinBeacons) {
+
+        //FDA50693-A4E2-4FB1-AFCF-C6EB07647802
+
+
         return checkinBeacons.stream().max((o1, o2) -> {
             int rssi1 = Integer.parseInt(o1.getRssi());
             int rssi2 = Integer.parseInt(o2.getRssi());
