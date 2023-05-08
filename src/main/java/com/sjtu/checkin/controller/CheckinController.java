@@ -19,7 +19,11 @@ public class CheckinController {
     @PostMapping(value = "/api/checkin")
     ApiResponse checkin(@RequestBody Checkin checkin) {
         log.info("start to checkin, request:{}", checkin);
-        return ApiResponse.ok(checkinService.save(checkin));
+        try {
+            return ApiResponse.ok(checkinService.save(checkin));
+        } catch (Exception e) {
+            return ApiResponse.error(e.getMessage());
+        }
     }
 
     @GetMapping(value = "/api/checkin")

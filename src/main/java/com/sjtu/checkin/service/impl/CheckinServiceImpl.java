@@ -44,8 +44,13 @@ public class CheckinServiceImpl implements CheckinService {
     }
 
     @Override
-    public Checkin save(Checkin checkin) {
-        //^\d{12}$
+    public Checkin save(Checkin checkin) throws Exception {
+        if (StringUtils.hasLength(checkin.getStudentNo())){
+            boolean isMatched = checkin.getStudentNo().matches("^\\d{12}$");
+            if (!isMatched) {
+                throw new Exception("学号不符合规范");
+            }
+        }
 
         List<Beacon> availableBeacons = beaconService.getBeacons();
         checkin.setClassroom(determineClassroom(availableBeacons, checkin.getBeacons()));

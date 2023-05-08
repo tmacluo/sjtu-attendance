@@ -15,6 +15,7 @@ public class SelectProvider {
             if (StringUtils.hasLength(checkin.getStudentNo())){
                 WHERE("student_no = #{studentNo}");
             }
+            ORDER_BY("last_updated_time desc");
         }}.toString();
     }
 }
