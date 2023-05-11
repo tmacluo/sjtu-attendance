@@ -22,6 +22,7 @@ public class CheckinController {
         try {
             return ApiResponse.ok(checkinService.save(checkin));
         } catch (Exception e) {
+            log.error("failed to checkin due to ", e);
             return ApiResponse.error(e.getMessage());
         }
     }
