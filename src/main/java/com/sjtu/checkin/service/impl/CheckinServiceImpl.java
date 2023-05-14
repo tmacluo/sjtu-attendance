@@ -87,7 +87,7 @@ public class CheckinServiceImpl implements CheckinService {
                 val seconds = Duration.between(lastCheckin.get().getCreatedTime().withZoneSameInstant(ZoneOffset.UTC),
                         ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)).getSeconds();
                 if (seconds <= checkinDurationInSeconds) {
-                    throw new Exception("你已签到成功，请2分钟后再试");
+                    throw new Exception("你已签到过了哦~，请2分钟后再试");
                 }
             }
         }
