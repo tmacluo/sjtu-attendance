@@ -36,4 +36,10 @@ public class CheckinController {
         log.info("start to get checkins, parameter {}", checkin);
         return ApiResponse.ok(checkinService.getCheckinsWithFilter(checkin));
     }
+
+    @GetMapping(value = "/api/checkin/statistics")
+    ApiResponse getCheckinStatistics() {
+        log.info("start to get checkins statistics");
+        return ApiResponse.ok(checkinService.getCheckinStatistics());
+    }
 }

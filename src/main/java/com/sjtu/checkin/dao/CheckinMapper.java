@@ -1,6 +1,7 @@
 package com.sjtu.checkin.dao;
 
 import com.sjtu.checkin.model.Checkin;
+import com.sjtu.checkin.model.CheckinStatistics;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.annotations.SelectProvider;
 
@@ -31,4 +32,11 @@ public interface CheckinMapper {
             "values (#{studentNo}, #{studentName}, #{classroom}, #{beaconsJson}, #{createdTime}, #{lastUpdatedTime})")
     @SelectKey(keyProperty = "id",keyColumn = "id",statement = "select last_insert_id()", before = false, resultType = String.class)
     void saveCheckins(Checkin checkin);
+
+    @Results({
+            @Result(property = "value", column = "total_checkin"),
+            @Result(property = "label", column = "classroom"),
+    })
+    @Select("select count(*) as total_checkin, classroom from checkin group by classroom; ")
+    List<CheckinStatistics> getCheckinStatistics();
 }

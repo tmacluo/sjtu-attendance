@@ -1,6 +1,7 @@
 package com.sjtu.checkin.service;
 
 import com.sjtu.checkin.model.Checkin;
+import com.sjtu.checkin.model.CheckinStatistics;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ public interface CheckinService {
     List<Checkin> get();
 
     List<Checkin> getCheckinsWithFilter(Checkin checkin);
+
+    List<CheckinStatistics> getCheckinStatistics();
 }

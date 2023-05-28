@@ -3,8 +3,11 @@ package com.sjtu.checkin.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.sjtu.checkin.dao.CheckinMapper;
 import com.sjtu.checkin.model.Beacon;
+import com.sjtu.checkin.model.CheckinStatistics;
 import com.sjtu.checkin.service.CheckinService;
 import com.sjtu.checkin.model.Checkin;
 import com.sjtu.checkin.service.BeaconService;
@@ -16,15 +19,16 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class CheckinServiceImpl implements CheckinService {
-
     private static final long checkinDurationInSeconds = 120;
 
     public static final String EMPTY = "";
@@ -33,6 +37,12 @@ public class CheckinServiceImpl implements CheckinService {
     @Autowired
     private BeaconService beaconService;
     final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final static Map<String, Integer> expectedAttendance = ImmutableMap.of(
+            "工程管214", 100,
+            "工程管324", 90,
+            "工程管315", 80
+    );
 
     @Override
     public List<Checkin> get() {
@@ -69,6 +79,22 @@ public class CheckinServiceImpl implements CheckinService {
         return checkin;
     }
 
+    @Override
+    public List<CheckinStatistics> getCheckinStatistics() {
+        List<CheckinStatistics> totalCheckinStatistics = Lists.newArrayList();
+        List<CheckinStatistics> checkinStatistics = checkinMapper.getCheckinStatistics();
+        checkinStatistics.forEach(statistics -> {
+            statistics.setType("实签");
+            totalCheckinStatistics.add(CheckinStatistics.builder()
+                    .label(statistics.getLabel())
+                    .type("应签")
+                    .value(expectedAttendance.getOrDefault(statistics.getLabel(),100))
+                    .build());
+            totalCheckinStatistics.add(statistics);
+        });
+        return totalCheckinStatistics;
+    }
+
     private void avoidDuplicatedCheckin(Checkin checkin) throws Exception {
         List<Checkin> checkinHistory = getCheckinsWithFilter(checkin);
         if (!CollectionUtils.isEmpty(checkinHistory)) {
@@ -99,6 +125,8 @@ public class CheckinServiceImpl implements CheckinService {
                 checkin.setBeacons(objectMapper.readValue(checkin.getBeaconsJson(), new TypeReference<List<Checkin.Beacon>>() {
                 }));
             }
+            //checkin.setCreatedTime(checkin.getCreatedTime().withZoneSameInstant(ZoneId.of("Asia/Shanghai")));
+            //checkin.setLastUpdatedTime(checkin.getLastUpdatedTime().withZoneSameInstant(ZoneId.of("Asia/Shanghai")));
         } catch (JsonProcessingException e) {
             log.error("convert json to beacon failed when getting checkin");
             throw new RuntimeException(e);
